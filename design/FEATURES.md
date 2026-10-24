@@ -4,7 +4,7 @@ Matrice des fonctionnalités du produit.
 
 | ID | Fonctionnalité | Description | Priorité | État |
 |---|---|---|---|---|
-| F-01 | Affichage plein écran | L'œuvre occupe l'écran entier avec titre et horloge minute. | Haute | À faire |
+| F-01 | Affichage plein écran | L'œuvre occupe l'écran entier avec titre. | Haute | À faire |
 | F-02 | Résponsive | Adaptation mobile, tablette et desktop ; navigation et zones tactiles adaptées. | Haute | À faire |
 | F-03 | Notification in-app | Notification (toast/bannière `aria-live`), création, erreur. | Haute | À faire |
 | F-04 | États d'interface | États chargement, vide, erreur, succès, confirmation et désactivé gérés. | Moyenne | À faire |

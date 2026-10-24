@@ -106,9 +106,8 @@
       create();
 
       setInterval(()=>{
-        const now = new Date();
-        if (now.getSeconds() === 0){ create(); }
-      }, 1000);
+        create();
+      }, 5000);
     })();
   </script>
 </body>

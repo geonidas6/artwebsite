@@ -126,9 +126,8 @@
       generate();
 
       setInterval(()=>{
-        const now = new Date();
-        if (now.getSeconds() === 0){ generate(); }
-      }, 1000);
+        generate();
+      }, 5000);
     })();
   </script>
 </body>

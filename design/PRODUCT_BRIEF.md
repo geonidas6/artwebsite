@@ -4,7 +4,7 @@
 Site web public affichant une œuvre d'art. Aucun compte, aucune authentification, aucune administration. Public cible : tout internaute.
 
 ## 2. Objectif produit
-Offrir une expérience contemplative en plein écran : une œuvre unique, un titre et une horloge minute.
+Offrir une expérience contemplative en plein écran : une œuvre unique, un titre.
 
 ## 3. Périmètre
 **Inclus :**
