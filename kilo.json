@@ -1,0 +1,11 @@
+{
+  "permission": {
+    "bash": {
+      "*": "allow",
+      "git worktree*": "deny",
+      "git clone*": "deny"
+    },
+    "external_directory": "deny"
+  },
+  "$schema": "https://app.kilo.ai/config.json"
+}
