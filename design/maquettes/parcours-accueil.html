@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oeuvre d'art</title>
+<link rel="stylesheet" href="../tokens.css">
+  <style>
+  html, body { margin: 0; height: 100%; width: 100%; overflow: hidden; background: var(--color-background); }
+  body { font-family: var(--font-family); color: var(--color-text-primary); }
+  canvas#artwork { display: block; width: 100vw; height: 100vh; background: var(--color-background); }
+
+  .overlay { position: absolute; inset: 0; z-index: var(--z-modal); display: none; flex-direction: column; align-items: center; justify-content: center; gap: var(--space-4); background: var(--color-background); padding: var(--space-8); transition: opacity var(--duration-base) var(--ease); }
+  .overlay.visible { display: flex; }
+  .overlay.hidden { opacity: 0; pointer-events: none; }
+  .overlay svg { width: 48px; height: 48px; fill: var(--color-text-secondary); opacity: 0.5; }
+  .skeleton { width: 40%; height: 120px; background: linear-gradient(90deg, #e5e5ea 25%, #f5f5f7 50%, #e5e5ea 75%); background-size: 200% 100%; border-radius: var(--radius-md); animation: shimmer 1.5s infinite; }
+  @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+  #toast { position: fixed; inset-inline: var(--space-4); bottom: var(--space-4); z-index: var(--z-toast); display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-4); border-radius: var(--radius-full); background: var(--color-surface); border: 1px solid var(--color-border); color: var(--color-text-primary); box-shadow: var(--shadow-md); transform: translateY(120px); opacity: 0; pointer-events: none; transition: transform var(--duration-base) var(--ease), opacity var(--duration-base) var(--ease); }
+  #toast.visible { transform: translateY(0); opacity: 1; }
+
+  :focus-visible { outline: none; box-shadow: 0 0 0 3px var(--color-focus); border-radius: var(--radius-sm); }
+
+  @media (min-width: 641px) {
+    .overlay { padding: var(--space-12); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0ms !important; transition-duration: 0ms !important; }
+    #toast { transition: none; }
+    .overlay { transition: none; }
+    .skeleton { animation: none; background: var(--color-border); }
+  }
+</style>
+</head>
+<body>
+  <canvas id="artwork" role="img" aria-label="Oeuvre d'art" aria-busy="true"></canvas>
+
+  <div class="overlay visible" id="state-loading">
+    <svg role="img" aria-label="icone chargement" focusable="false" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Chargement</title><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" fill="none" stroke-dasharray="31.4 31.4" stroke-dashoffset="0"><animate attributeName="stroke-dashoffset" values="31.4;0" dur="1s" repeatCount="indefinite"/></circle></svg>
+    <div class="skeleton" aria-hidden="true"></div>
+  </div>
+
+  <div class="overlay hidden" id="state-creation">
+    <svg role="img" aria-label="icone creation" focusable="false" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Creation</title><circle cx="12" cy="12" r="10" fill="currentColor"/><path d="M12 2L2 7l10 10 10-10L12 2zm0 18.5l-6-6L6 6.5l1.41-1.41L12 12.59l4.59-4.59L18 6.5l-6 6z" fill="#fff"/></svg>
+    <div class="skeleton" aria-hidden="true"></div>
+  </div>
+
+  <div class="overlay hidden" id="state-resultat">
+    <svg role="img" aria-label="icone resultat" focusable="false" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Resultat</title><circle cx="12" cy="12" r="10" fill="currentColor"/><path d="M9 16.17l4 4 8-8-1.41-1.41L12 14.34l-6.34-6.34-1.41 1.41z" fill="#fff"/></svg>
+  </div>
+
+  <div id="toast" role="status" aria-live="polite" aria-atomic="true" aria-hidden="true">
+  </div>
+
+  <script>
+    (function(){
+      const canvas = document.getElementById('artwork');
+      const ctx = canvas.getContext('2d');
+      const states = { loading: document.getElementById('state-loading'), creation: document.getElementById('state-creation'), resultat: document.getElementById('state-resultat') };
+
+      let width, height;
+      function resize(){ width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; draw(); }
+      window.addEventListener('resize', resize);
+      const palette = ['#2563EB','#1D4ED8','#059669','#DC2626','#7C3AED','#DB2777','#D97706','#0891B2'];
+      resize();
+
+      function seedFromDate(){
+        const now = new Date();
+        return now.getFullYear()*10000 + (now.getMonth()+1)*100 + now.getDate() + now.getHours()*60 + now.getMinutes();
+      }
+      function seededRandom(seed){
+        let s = seed;
+        return function(){
+          s = (s * 16807) % 2147483647;
+          return (s % 1000) / 1000;
+        };
+      }
+
+      function draw(){
+        const r = seededRandom(seedFromDate());
+        ctx.clearRect(0, 0, width, height);
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        const passes = 40 + Math.floor(r()*60);
+        for (let i = 0; i < passes; i++){
+          ctx.beginPath();
+          ctx.strokeStyle = palette[Math.floor(r()*palette.length)];
+          ctx.globalAlpha = 0.15 + r()*0.35;
+          ctx.lineWidth = 1 + r()*12;
+          ctx.moveTo(r()*width, r()*height);
+          ctx.lineTo(r()*width, r()*height);
+          ctx.stroke();
+        }
+        ctx.globalAlpha = 1;
+        const dots = 20 + Math.floor(r()*30);
+        for (let i = 0; i < dots; i++){
+          ctx.beginPath();
+          ctx.fillStyle = palette[Math.floor(r()*palette.length)];
+          ctx.globalAlpha = 0.3 + r()*0.4;
+          const x = r()*width, y = r()*height, rad = 2 + r()*18;
+          ctx.arc(x, y, rad, 0, Math.PI*2);
+          ctx.fill();
+        }
+      }
+
+      function show(key){
+        Object.values(states).forEach(s=>{s.classList.add('hidden'); s.classList.remove('visible');});
+        states[key].classList.remove('hidden');
+        states[key].classList.add('visible');
+      }
+      function hideAll(){ Object.values(states).forEach(s=>{s.classList.add('hidden'); s.classList.remove('visible');}); }
+
+      function generate(){
+        show('loading');
+        setTimeout(()=>{
+          show('creation');
+          requestAnimationFrame(()=>{
+            draw();
+            hideAll();
+            show('resultat');
+          });
+        }, 1200);
+      }
+
+      generate();
+
+      setInterval(()=>{
+        const now = new Date();
+        if (now.getSeconds() === 0){ generate(); }
+      }, 1000);
+    })();
+  </script>
+</body>
+</html>
