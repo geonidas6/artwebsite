@@ -14,3 +14,11 @@ build/
 # Environnements
 .env
 .env.*
+
+# ADE — fichiers locaux et artefacts générés
+.docker/
+.vite/
+coverage/
+.coverage
+!.env.example
+.DS_Store

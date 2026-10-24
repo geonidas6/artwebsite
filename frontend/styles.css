@@ -1,0 +1,173 @@
+@import url('tokens.css');
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  font-family: var(--font-family);
+  background: var(--color-background);
+  color: var(--color-text-primary);
+  overflow: hidden;
+}
+
+.gallery {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+#artwork {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--color-background);
+}
+
+.state {
+  position: absolute;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-background);
+  z-index: var(--z-modal);
+  padding: var(--space-8);
+}
+
+.state.visible {
+  display: flex;
+}
+
+.state.hidden {
+  display: none;
+}
+
+.state-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  text-align: center;
+}
+
+.state svg {
+  width: 48px;
+  height: 48px;
+  fill: currentColor;
+  flex-shrink: 0;
+}
+
+.state-loading svg {
+  color: var(--color-text-secondary);
+}
+
+.state-error svg {
+  color: var(--color-error);
+}
+
+.state-empty svg {
+  color: var(--color-text-secondary);
+}
+
+.skeleton {
+  width: 60%;
+  max-width: 280px;
+  height: 60px;
+  background: linear-gradient(90deg, #e5e5ea 25%, #f5f5f7 50%, #e5e5ea 75%);
+  background-size: 200% 100%;
+  border-radius: var(--radius-md);
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.state-message {
+  margin: 0;
+  font-size: var(--text-base);
+  line-height: var(--text-base-line);
+  color: var(--color-text-primary);
+}
+
+.toast {
+  position: fixed;
+  inset-inline: var(--space-4);
+  bottom: var(--space-4);
+  z-index: var(--z-toast);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-full);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+  box-shadow: var(--shadow-md);
+  transform: translateY(120px);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform var(--duration-base) var(--ease), opacity var(--duration-base) var(--ease);
+  font-size: var(--text-sm);
+  line-height: var(--text-sm-line);
+  min-height: 44px;
+}
+
+.toast.visible {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.toast svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.toast.success svg {
+  color: var(--color-success);
+}
+
+.toast.error svg {
+  color: var(--color-error);
+}
+
+@media (min-width: 641px) {
+  .toast {
+    inset-inline: auto;
+    right: var(--space-6);
+    bottom: var(--space-6);
+  }
+  .skeleton {
+    width: 40%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0ms !important;
+    transition-duration: 0ms !important;
+  }
+  .toast {
+    transition: none;
+  }
+  .skeleton {
+    animation: none;
+    background: var(--color-border);
+  }
+}
+
+:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--color-focus);
+  border-radius: var(--radius-sm);
+}

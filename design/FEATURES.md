@@ -1,24 +1,16 @@
 # FEATURES — oeuvre d'art
 
-Matrice des fonctionnalités du produit.
+| ID | Fonctionnalité | Description | Priorité |
+|---|---|---|---|
+| F-01 | Œuvre générative visible | Le canvas affiche immédiatement couleurs et lignes abstraites sur tout l'écran. | Haute |
+| F-02 | Renouvellement automatique | Une nouvelle composition visuelle est générée et affichée toutes les cinq secondes. | Haute |
+| F-03 | Page unique immersive | Une seule page d'accueil plein écran ; aucun bouton, menu, retour, landing ou écran secondaire. | Haute |
+| F-04 | États passifs accessibles | Chargement, création, erreur et résultat sont signalés visuellement et par `aria-live` sur la même page. | Moyenne |
+| F-05 | Responsive | Le canvas couvre correctement mobile, tablette et desktop. | Haute |
+| F-06 | API et santé | `GET /api/artwork/current` et `GET /api/health` restent publics. | Moyenne |
+| F-07 | HTTPS | Exposition via Traefik externe sur `oeuvre-dart.it-sefako.com`. | Haute |
 
-| ID | Fonctionnalité | Description | Priorité | État |
-|---|---|---|---|---|
-| F-01 | Affichage plein écran | L'œuvre occupe l'écran entier avec titre. | Haute | À faire |
-| F-02 | Résponsive | Adaptation mobile, tablette et desktop ; navigation et zones tactiles adaptées. | Haute | À faire |
-| F-03 | Notification in-app | Notification (toast/bannière `aria-live`), création, erreur. | Haute | À faire |
-| F-04 | États d'interface | États chargement, vide, erreur, succès, confirmation et désactivé gérés. | Moyenne | À faire |
-| F-05 | API œuvre courante | `GET /api/artwork/current` retourne l'œuvre courante en JSON avec url image. | Haute | À faire |
-| F-06 | Healthcheck | `GET /api/health` retourne l'état de santé du service. | Moyenne | À faire |
-| F-07 | Icônes SVG accessibles | Icônes cohérentes, libellées, accessibles pour les actions (pas de texte seul). | Moyenne | À faire |
-| F-08 | Page d'accueil intentionnelle | Landing/dashboard/redirection auth ; jamais la page de bienvenue par défaut du framework. | Haute | À faire |
-| F-09 | HTTPS / Traefik | Exposition via Traefik externe, routeur `websecure`, domaine `oeuvre-dart.it-sefako.com`, API sous `/api`. | Haute | À faire |
+## Règles produit
 
-## Règles métier
-- Aucune authentification requise ; accès public.
-- Aucune persistance longue durée ; stockage mémoire ou SQLite léger.
-
-## Non-fonctionnalités (exclues)
-- Comptes utilisateurs, rôles, administration.
-- Persistance longue des œuvres.
-- Formulaires de création utilisateur.
+- Aucune authentification ni donnée utilisateur.
+- Les décisions de `.ade/USER_DECISIONS.md` priment sur toute convention générique.
